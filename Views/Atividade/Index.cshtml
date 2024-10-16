@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Atividades da nossa Turma";
+}
+
+<h2>Cadastro de Atividade</h2>
+
+@if (ViewBag.NomeProfessor == null)
+{
+    <a asp-controller="Login">Login</a>
+}
+else
+{
+    
+
+
+@* Cadastro Atividade *@
+<form asp-controller="Atividade" asp-action="CadastrarAtividade" method="post">
+    <input type="text" name="nomeAtividade" placeholder="Descrição da Atividade" required />
+
+    @* Campo oculto para passar o turmaId *@
+    <input type="hidden" name="turmaId" value="@ViewBag.TurmaId" />
+
+    <button type="submit">Cadastrar Atividade</button>
+</form>
+
+<h2>Lista de Atividades</h2>
+
+@* Tabela de Atividades *@
+<table>
+    <thead>
+        <tr>
+            <th>Número</th>
+            <th>Nome da Atividade</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var atividade in Model)
+        {
+            <tr>
+                <td>@atividade.AtividadeId</td>
+                <td>@atividade.Descricao</td>
+                <td>
+                    <div style="display:flex">
+                        @* Formulário de exclusão de atividade *@
+                        <form asp-controller="Atividade" asp-action="ExcluirAtividade" method="post">
+                            <input type="hidden" name="atividadeId" value="@atividade.AtividadeId" />
+                            <button type="submit">Excluir</button>
+                        </form>
+
+                        @* Formulário para visualizar detalhes de uma atividade *@
+                        <form asp-controller="Atividade" asp-action="Index" asp-route-turmaId="@atividade.TurmaId">
+                            <input type="hidden" name="atividadeId" value="@atividade.AtividadeId" />
+                            <button type="submit">Visualizar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+}
